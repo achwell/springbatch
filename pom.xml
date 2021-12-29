@@ -11,6 +11,8 @@
 
     <modules>
         <module>spring-batch</module>
+        <module>spring-rest-service</module>
+        <module>readers</module>
     </modules>
 
     <properties>
