@@ -1,0 +1,15 @@
+spring:
+  batch:
+    job:
+      enabled: false
+#    jdbc:
+#      initialize-schema: always
+  datasource:
+    password: spring
+    url: jdbc:postgresql://localhost:5432/spring_batch
+    username: spring
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    generate-ddl: on
+    hibernate:
+      ddl-auto: create-drop
