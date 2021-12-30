@@ -1,9 +1,9 @@
 package com.infybuzz.config;
 
 import com.infybuzz.model.Student;
-import com.infybuzz.processor.FirstItemProcessor;
+import com.infybuzz.processor.StudentProcessor;
 import com.infybuzz.reader.*;
-import com.infybuzz.writer.FirstItemWriter;
+import com.infybuzz.writer.*;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -22,10 +22,15 @@ public class SampleJob {
     private final StudentXmlReader studentXmlReader;
     private final StudentJdbcReader studentJdbcReader;
     private final StudentItemReader studentItemReader;
-    private final FirstItemProcessor firstItemProcessor;
-    private final FirstItemWriter firstItemWriter;
+    private final StudentProcessor studentProcessor;
+    private final CsvFileWriter csvFileWriter;
+    private final JsonFileWriter jsonFileWriter;
+    private final XmlFileWriter xmlFileWriter;
+    private final JdbcWriter jdbcWriter;
+    private final PreparedStatementWriter preparedStatementWriter;
+    private final RestWriter restWriter;
 
-    public SampleJob(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, StudentCsvReader studentCsvReader, StudentJsonReader studentJsonReader, StudentXmlReader studentXmlReader, StudentJdbcReader studentJdbcReader, StudentItemReader studentItemReader, FirstItemProcessor firstItemProcessor, FirstItemWriter firstItemWriter) {
+    public SampleJob(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, StudentCsvReader studentCsvReader, StudentJsonReader studentJsonReader, StudentXmlReader studentXmlReader, StudentJdbcReader studentJdbcReader, StudentItemReader studentItemReader, StudentProcessor studentProcessor, CsvFileWriter csvFileWriter, JsonFileWriter jsonFileWriter, XmlFileWriter xmlFileWriter, JdbcWriter jdbcWriter, PreparedStatementWriter preparedStatementWriter, RestWriter restWriter) {
         this.jobBuilderFactory = jobBuilderFactory;
         this.stepBuilderFactory = stepBuilderFactory;
         this.studentCsvReader = studentCsvReader;
@@ -33,8 +38,13 @@ public class SampleJob {
         this.studentXmlReader = studentXmlReader;
         this.studentJdbcReader = studentJdbcReader;
         this.studentItemReader = studentItemReader;
-        this.firstItemProcessor = firstItemProcessor;
-        this.firstItemWriter = firstItemWriter;
+        this.studentProcessor = studentProcessor;
+        this.csvFileWriter = csvFileWriter;
+        this.jsonFileWriter = jsonFileWriter;
+        this.xmlFileWriter = xmlFileWriter;
+        this.jdbcWriter = jdbcWriter;
+        this.preparedStatementWriter = preparedStatementWriter;
+        this.restWriter = restWriter;
     }
 
 
@@ -51,9 +61,9 @@ public class SampleJob {
         return stepBuilderFactory
                 .get("First Chunk Step")
                 .<Student, Student>chunk(3)
-                .reader(studentItemReader)
-                //.processor(firstItemProcessor)
-                .writer(firstItemWriter)
+                .reader(studentJdbcReader)
+                .processor(studentProcessor)
+                .writer(restWriter)
                 .build();
     }
 }
